@@ -37,7 +37,9 @@ module.exports = async (req, res) => {
   let chatId;
   try {
     const update = req.body;
-    const message = update?.message;
+    // Posts in the capture channel arrive as `channel_post`; `message` only
+    // covers private/group chats (e.g. a stray DM to the bot).
+    const message = update?.channel_post || update?.message;
     if (!message || !message.text) {
       res.status(200).send("ok");
       return;
